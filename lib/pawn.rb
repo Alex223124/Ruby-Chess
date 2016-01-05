@@ -1,10 +1,9 @@
 require_relative 'piece'
 
 class Pawn < Piece
-  attr_accessor :has_moved, :unique_moves
+  attr_accessor :unique_moves
 
   def initialize(coords, icon, team, board)
-    @has_moved = false
     super(coords, icon, team, board)
   end
 
@@ -12,10 +11,6 @@ class Pawn < Piece
     @unique_moves = {}
     get_moves
     @unique_moves
-  end
-
-  def mark
-    self.has_moved = true
   end
 
   def kinged_status

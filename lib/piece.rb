@@ -1,6 +1,6 @@
 class Piece
 
-  attr_accessor :position
+  attr_accessor :position, :has_moved
   attr_reader :color, :board, :icon
 
   def initialize(position, icon, color, board)
@@ -8,6 +8,7 @@ class Piece
     @position = position
     @icon = icon
     @board = board
+    @has_moved = false
   end
 
   def move_will_leave_in_check?(from, to, colors_turn)
@@ -53,7 +54,7 @@ class Piece
   end
 
   def mark
-    nil
+    self.has_moved = true
   end
 
   def kinged_status
