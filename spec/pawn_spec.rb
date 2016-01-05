@@ -48,7 +48,7 @@ describe "Pawn" do
     end
   end
 
-  context "after it has moved" do 
+  context "after it has moved" do
     it "after a pawn moves #has_moved should equal true" do
       black_pawn.mark
       white_pawn.mark

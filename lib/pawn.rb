@@ -18,6 +18,15 @@ class Pawn < Piece
     self.has_moved = true
   end
 
+  def kinged_status
+    if self.color == :Black && self.position[0] == 7
+      return true
+    elsif self.color == :White && self.position[0] == 0
+      return true
+    end
+    false
+  end
+
   def get_moves
     black_forward if self.color == :Black
     white_forward if self.color == :White

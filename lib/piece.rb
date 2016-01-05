@@ -10,10 +10,6 @@ class Piece
     @board = board
   end
 
-  def mark
-    nil
-  end
-
   def move_will_leave_in_check?(from, to, colors_turn)
     response = false
     to_piece = self.board.cell[to[0]][to[1]]
@@ -54,5 +50,13 @@ class Piece
   def enemy_occupied_spot?(spot)
     return false if @board.cell[spot[0]][spot[1]].nil?
     return true if @board.cell[spot[0]][spot[1]].color != self.color
+  end
+
+  def mark
+    nil
+  end
+
+  def kinged_status
+    false
   end
 end

@@ -20,6 +20,7 @@ class Board
     check_conditions(from, to, colors_turn, piece)
     piece.mark
     execute_move(from, to)
+    promote(piece) if piece.kinged_status == true
   end
 
   def check_conditions(from, to, colors_turn, piece)
@@ -34,6 +35,13 @@ class Board
     elsif piece.move_will_leave_in_check?(from, to, colors_turn)
       raise MoveError.new("THAT MOVE WILL LEAVE YOU IN CHECK")
     end
+  end
+
+  def promote(piece)
+    position = piece.position
+    color = piece.color
+    self.cell[position[0]][position[1]] = nil
+    self.cell[position[0]][position[1]] = Queen.new(position, @queens[1], color, self)
   end
 
   def execute_move(from, to)

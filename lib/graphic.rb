@@ -99,7 +99,7 @@ class Graphic
         # square for the icon
         if idx == @cursor_pos[0] && idx_2 == @cursor_pos[1]
           if piece.nil?
-            print " #{idx},#{idx_2} ".colorize( :background => :light_blue, :color => :white)
+            print "     ".colorize( :background => :light_blue, :color => :white)
           else
             if piece.color == :Black
               print piece.icon.colorize( :background => :light_blue, :color => :black)
@@ -111,22 +111,22 @@ class Graphic
         # if the square is empty
         elsif piece.nil?
           if !@board.cell[@cursor_pos[0]][@cursor_pos[1]].nil? && @board.cell[@cursor_pos[0]][@cursor_pos[1]].moves.include?([idx, idx_2])
-            print " #{idx},#{idx_2} ".colorize(:background => :blue, :color => :white)
+            print "     ".colorize(:background => :blue, :color => :white)
             next
           end
 
           if (idx + idx_2).even?
-            print " #{idx},#{idx_2} ".colorize( :background => :yellow, :color => :black)
+            print "     ".colorize( :background => :yellow, :color => :black)
           else
-            print " #{idx},#{idx_2} ".colorize( :background => :red, :color => :black)
+            print "     ".colorize( :background => :red, :color => :black)
           end
 
         # highlight possible captures
         elsif !@board.cell[@cursor_pos[0]][@cursor_pos[1]].nil? && @board.cell[@cursor_pos[0]][@cursor_pos[1]].moves.include?([idx, idx_2])
             if piece.color == :Black
-              print "#{@board.cell[idx][idx_2].icon}".colorize(:background => :magenta, :color => :black)
+              print "#{@board.cell[idx][idx_2].icon}".colorize(:background => :blue, :color => :black)
             else
-              print "#{@board.cell[idx][idx_2].icon}".colorize(:background => :magenta, :color => :white)
+              print "#{@board.cell[idx][idx_2].icon}".colorize(:background => :blue, :color => :white)
             end
 
         # occupied by a piece
@@ -147,31 +147,34 @@ class Graphic
         end
       end
     end
-    puts " "
-    if !@board.cell[@cursor_pos[0]][@cursor_pos[1]].nil? 
-      puts "!!!!!!!! - #{@color} NEEDS TO GET OUT OF CHECK - !!!!!!!!!" if @board.in_check?(@color)
 
-      puts " "
-      puts "Possible Moves: "
-      puts "#{@board.cell[@cursor_pos[0]][@cursor_pos[1]].moves}"
-      puts " "
+    ## for debugging purposes ##
+    # puts " "
+    # if !@board.cell[@cursor_pos[0]][@cursor_pos[1]].nil? 
+    #   puts "!!!!!!!! - #{@color} NEEDS TO GET OUT OF CHECK - !!!!!!!!!" if @board.in_check?(@color)
 
-      if @board.cell[@cursor_pos[0]][@cursor_pos[1]].class == Pawn
-        puts "This piece has moved: #{@board.cell[@cursor_pos[0]][@cursor_pos[1]].has_moved}"
-      end
-      puts " "
-      puts "Current Position: "
-      puts "#{@board.cell[@cursor_pos[0]][@cursor_pos[1]].position}"      
-      puts " "
-      puts "Team: "
-      puts "#{@board.cell[@cursor_pos[0]][@cursor_pos[1]].color}"      
-      puts " "
-      puts "Move Directions: "
-      puts "#{@board.cell[@cursor_pos[0]][@cursor_pos[1]].move_directions}"      
-    else
-      puts " "
-      puts "Current Position: "
-      puts "#{[@cursor_pos[0],@cursor_pos[1]]}" 
-    end
+    #   puts " "
+    #   puts "Possible Moves: "
+    #   puts "#{@board.cell[@cursor_pos[0]][@cursor_pos[1]].moves}"
+    #   puts " "
+
+    #   if @board.cell[@cursor_pos[0]][@cursor_pos[1]].class == Pawn
+    #     puts "This piece has moved: #{@board.cell[@cursor_pos[0]][@cursor_pos[1]].has_moved}"
+    #     puts "Is it a king? #{@board.cell[@cursor_pos[0]][@cursor_pos[1]].kinged_status}"
+    #   end
+    #   puts " "
+    #   puts "Current Position: "
+    #   puts "#{@board.cell[@cursor_pos[0]][@cursor_pos[1]].position}"      
+    #   puts " "
+    #   puts "Team: "
+    #   puts "#{@board.cell[@cursor_pos[0]][@cursor_pos[1]].color}"      
+    #   puts " "
+    #   puts "Move Directions: "
+    #   puts "#{@board.cell[@cursor_pos[0]][@cursor_pos[1]].move_directions}"      
+    # else
+    #   puts " "
+    #   puts "Current Position: "
+    #   puts "#{[@cursor_pos[0],@cursor_pos[1]]}" 
+    # end
   end
 end
