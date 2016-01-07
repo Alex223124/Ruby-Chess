@@ -10,8 +10,6 @@ require_relative 'sliding_pieces'
 require_relative 'board'
 require_relative 'graphic'
 
-require 'byebug'
-
 class Game
   attr_accessor :board
 

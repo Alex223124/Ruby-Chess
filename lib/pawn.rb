@@ -45,11 +45,13 @@ class Pawn < Piece
     return nil if self.has_moved
 
     if self.color == :Black
-      if self.board.cell[(self.position[0])+2][self.position[1]] == nil
+      if self.board.cell[(self.position[0])+2][self.position[1]] == nil &&
+        self.board.cell[(self.position[0])+1][self.position[1]] == nil
         @unique_moves[:down_2] = [2,0]
       end
     else
-      if self.board.cell[(self.position[0])-2][self.position[1]] == nil
+      if self.board.cell[(self.position[0])-2][self.position[1]] == nil &&
+        self.board.cell[(self.position[0])-1][self.position[1]] == nil
         @unique_moves[:up_2] = [-2,0]
       end
     end

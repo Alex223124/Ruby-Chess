@@ -1,7 +1,5 @@
 require 'colorize'
 require 'io/console'
-require 'byebug'
-require 'pp'
 class Graphic
 
   attr_accessor :show_cursor
@@ -99,7 +97,7 @@ class Graphic
         # square for the icon
         if idx == @cursor_pos[0] && idx_2 == @cursor_pos[1]
           if piece.nil?
-            print "     ".colorize( :background => :light_blue, :color => :white)
+            print "     ".colorize( :background => :light_blue, :color => :black)
           else
             if piece.color == :Black
               print piece.icon.colorize( :background => :light_blue, :color => :black)
@@ -111,22 +109,34 @@ class Graphic
         # if the square is empty
         elsif piece.nil?
           if !@board.cell[@cursor_pos[0]][@cursor_pos[1]].nil? && @board.cell[@cursor_pos[0]][@cursor_pos[1]].moves.include?([idx, idx_2])
-            print "     ".colorize(:background => :blue, :color => :white)
+            if (idx + idx_2).even?
+              print "     ".colorize(:background => :light_yellow, :color => :black)
+            else
+              print "     ".colorize(:background => :light_red, :color => :black)
+            end
             next
           end
 
           if (idx + idx_2).even?
-            print "     ".colorize( :background => :yellow, :color => :black)
+            print "     ".colorize( :background => :yellow, :color => :light_yellow)
           else
-            print "     ".colorize( :background => :red, :color => :black)
+            print "     ".colorize( :background => :red, :color => :light_red)
           end
 
         # highlight possible captures
         elsif !@board.cell[@cursor_pos[0]][@cursor_pos[1]].nil? && @board.cell[@cursor_pos[0]][@cursor_pos[1]].moves.include?([idx, idx_2])
             if piece.color == :Black
-              print "#{@board.cell[idx][idx_2].icon}".colorize(:background => :blue, :color => :black)
+              if (idx + idx_2).even?
+                print "#{@board.cell[idx][idx_2].icon}".colorize(:background => :light_yellow, :color => :black)
+              else
+                print "#{@board.cell[idx][idx_2].icon}".colorize(:background => :light_red, :color => :black)
+              end
             else
-              print "#{@board.cell[idx][idx_2].icon}".colorize(:background => :blue, :color => :white)
+              if (idx + idx_2).even?
+                print "#{@board.cell[idx][idx_2].icon}".colorize(:background => :light_yellow, :color => :white)
+              else
+                print "#{@board.cell[idx][idx_2].icon}".colorize(:background => :light_red, :color => :white)
+              end
             end
 
         # occupied by a piece
@@ -147,16 +157,13 @@ class Graphic
         end
       end
     end
-
-    ## for debugging purposes ##
-    # puts " "
-    # if !@board.cell[@cursor_pos[0]][@cursor_pos[1]].nil? 
-    #   puts "!!!!!!!! - #{@color} NEEDS TO GET OUT OF CHECK - !!!!!!!!!" if @board.in_check?(@color)
-
-    #   puts " "
-    #   puts "Possible Moves: "
-    #   puts "#{@board.cell[@cursor_pos[0]][@cursor_pos[1]].moves}"
-    #   puts " "
+    puts " "
+    if !@board.cell[@cursor_pos[0]][@cursor_pos[1]].nil? 
+      puts " "
+      puts "Possible Moves: "
+      puts "#{@board.cell[@cursor_pos[0]][@cursor_pos[1]].moves.length}"
+      puts " "
+    end
 
     #   if @board.cell[@cursor_pos[0]][@cursor_pos[1]].class == Pawn
     #     puts "This piece has moved: #{@board.cell[@cursor_pos[0]][@cursor_pos[1]].has_moved}"

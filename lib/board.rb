@@ -1,5 +1,3 @@
-require 'byebug'
-
 class Board
   attr_reader :size
   attr_accessor :cell
