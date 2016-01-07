@@ -3,11 +3,13 @@ Command Line Chess Written in Ruby
 
 ### Logic
 * Piece.rb is the parent class to all piece Objects.
-* Each piece holds a reference to an instance of the Board class.
-* There are three kinds of pieces, SlidingPieces, JumpingPieces, and Pawns
-* SlidingPieces inherit from Piece and includes: Queens, Bishops, and Rooks
-* JumpingPiees inherit from Piece include: Kings and Knights
+* Each instance of Piece holds a reference to the Board class.
+* There are three child classes to Piece, SlidingPieces, JumpingPieces, and Pawns
+* SlidingPieces include: Queens, Bishops, and Rooks
+* JumpingPieces include: Kings and Knights
+* E.g. Knight < JumpingPiece < Piece
 * Pawns inherit directly from Piece
+* E.g. Pawn < Piece
 
 
 ### Features
