@@ -164,7 +164,7 @@ class Graphic
       puts "#{@board.cell[@cursor_pos[0]][@cursor_pos[1]].moves.length}"
       puts " "
     end
-
+    ## For Debugging ##
     #   if @board.cell[@cursor_pos[0]][@cursor_pos[1]].class == Pawn
     #     puts "This piece has moved: #{@board.cell[@cursor_pos[0]][@cursor_pos[1]].has_moved}"
     #     puts "Is it a king? #{@board.cell[@cursor_pos[0]][@cursor_pos[1]].kinged_status}"

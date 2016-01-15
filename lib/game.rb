@@ -13,9 +13,9 @@ require_relative 'graphic'
 class Game
   attr_accessor :board
 
-  def initialize
-    @board = Board.new(8)
-    @graphic = Graphic.new(@board)
+  def initialize(board, graphic)
+    @board = board
+    @graphic = graphic
     @teams = [:Black, :White]
     @colors_turn = turn?
   end
@@ -48,5 +48,8 @@ end
 class MoveError < StandardError
 end
 
-g = Game.new
-g.run
+board = Board.new(8)
+graphic = Graphic.new(board)
+
+game = Game.new(board, graphic)
+game.run
