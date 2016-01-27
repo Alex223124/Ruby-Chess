@@ -27,7 +27,7 @@ Command Line Chess Written in Ruby
 Each piece will have its own move_directions method.
 
 ```ruby
-// Rook < SlidingPieces
+# Rook < SlidingPieces
   def move_directions
     { :up    => [-1,0], 
       :down  => [1,0],
