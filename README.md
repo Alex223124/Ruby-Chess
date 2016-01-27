@@ -12,6 +12,39 @@ Command Line Chess Written in Ruby
 * E.g. Pawn < Piece
 
 ### Classes
+
+* Game - The game class is responsible for actually running the game. It holds the game loop #run which will rescue any MoveErrors. MoveErrors is an error class that inherits from StandardError, this way its easier to debug error messages or create your own.
+```ruby
+  def run
+    until checkmate?
+      begin
+      from, to = @graphic.get_inputs(@colors_turn)
+      @board.move(from, to, @colors_turn)
+      rescue MoveError
+      retry
+      end
+      @colors_turn = turn?
+      @graphic.display
+    end
+    puts "GAME OVER CHECKMATE"
+  end
+```
+This is how we created the MoveError class
+```ruby
+class MoveError < StandardError
+end
+```
+
+**Dependency Injection and the Game class**. The Game class takes two additional objects, Board and Graphic, you can see where we use them in #run above. The code below shows how our Game class is initialized. The instances of board and game class are created and then passed into the Game class's #new method. This is preferred to creating Board and Graphic inside the Game class #initialize. This is an example of Depenency Injection. The idea is to create your dependencies outside of the class that is dependent on them. Dependency Injection is an important part of good object oriented design.
+```ruby
+
+board = Board.new(8)
+graphic = Graphic.new(board)
+
+game = Game.new(board, graphic)
+game.run
+```
+
 * Piece - Holds logic all pieces share. Every piece can move on the board and we use the instance method #moves to find all of the moves for a particular piece. The #move_directions method is polymorphic. Each piece can move in slightly different directions I stored those directions in a hash, see below.
 
 ```ruby

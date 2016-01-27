@@ -25,8 +25,7 @@ class Game
       begin
       from, to = @graphic.get_inputs(@colors_turn)
       @board.move(from, to, @colors_turn)
-      rescue MoveError => e
-        puts e
+      rescue MoveError
       retry
       end
       @colors_turn = turn?
