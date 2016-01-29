@@ -1,6 +1,9 @@
 ## Ruby-Chess
 Command Line Chess Written in Ruby
 
+![Chess Screenshot](https://cloud.githubusercontent.com/assets/1512282/12153051/b07bbd18-b46c-11e5-8478-368fda6b21af.png)
+
+
 ### Logic
 * Piece.rb is the parent class to all piece Objects.
 * Each instance of Piece holds a reference to the Board class.
@@ -96,9 +99,6 @@ Each piece will have its own move_directions method.
 * Warns player when they're in check
 * RSpec for test coverage
 * Object Oriented Design Features: Inheritance and Polymorphism
-
-
-![Chess Screenshot](https://cloud.githubusercontent.com/assets/1512282/12153051/b07bbd18-b46c-11e5-8478-368fda6b21af.png)
 
 
 ### Up and running
