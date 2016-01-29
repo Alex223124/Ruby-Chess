@@ -20,12 +20,105 @@
 
     <section class="main-content">
       <h2>
-<a id="ruby-chess" class="anchor" href="#ruby-chess" aria-hidden="true"><span class="octicon octicon-link"></span></a>Ruby-Chess</h2>
+<a id="ruby-chess" class="anchor" href="#ruby-chess" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Ruby-Chess</h2>
 
 <p>Command Line Chess Written in Ruby</p>
 
+<p><img src="https://cloud.githubusercontent.com/assets/1512282/12153051/b07bbd18-b46c-11e5-8478-368fda6b21af.png" alt="Chess Screenshot"></p>
+
 <h3>
-<a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h3>
+<a id="logic" class="anchor" href="#logic" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Logic</h3>
+
+<ul>
+<li>Piece.rb is the parent class to all piece Objects.</li>
+<li>Each instance of Piece holds a reference to the Board class.</li>
+<li>There are three child classes to Piece, SlidingPieces, JumpingPieces, and Pawns</li>
+<li>SlidingPieces include: Queens, Bishops, and Rooks</li>
+<li>JumpingPieces include: Kings and Knights</li>
+<li>E.g. Knight &lt; JumpingPiece &lt; Piece</li>
+<li>Pawns inherit directly from Piece</li>
+<li>E.g. Pawn &lt; Piece</li>
+</ul>
+
+<h3>
+<a id="classes" class="anchor" href="#classes" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Classes</h3>
+
+<ul>
+<li>Game - The game class is responsible for actually running the game. It holds the game loop #run which will rescue any MoveErrors. MoveErrors is an error class that inherits from StandardError, this way its easier to debug error messages or create your own.</li>
+</ul>
+
+<div class="highlight highlight-source-ruby"><pre>  <span class="pl-k">def</span> <span class="pl-en">run</span>
+    <span class="pl-k">until</span> checkmate?
+      <span class="pl-k">begin</span>
+      from, to <span class="pl-k">=</span> <span class="pl-smi">@graphic</span>.get_inputs(<span class="pl-smi">@colors_turn</span>)
+      <span class="pl-smi">@board</span>.move(from, to, <span class="pl-smi">@colors_turn</span>)
+      <span class="pl-k">rescue</span> <span class="pl-c1">MoveError</span>
+      <span class="pl-k">retry</span>
+      <span class="pl-k">end</span>
+      <span class="pl-smi">@colors_turn</span> <span class="pl-k">=</span> turn?
+      <span class="pl-smi">@graphic</span>.display
+    <span class="pl-k">end</span>
+    puts <span class="pl-s"><span class="pl-pds">"</span>GAME OVER CHECKMATE<span class="pl-pds">"</span></span>
+  <span class="pl-k">end</span></pre></div>
+
+<p>This is how we created the MoveError class</p>
+
+<div class="highlight highlight-source-ruby"><pre><span class="pl-k">class</span> <span class="pl-en">MoveError<span class="pl-e"> &lt; StandardError</span></span>
+<span class="pl-k">end</span></pre></div>
+
+<p><strong>Dependency Injection and the Game class</strong>. The Game class takes two additional objects, Board and Graphic, you can see where we use them in #run above. The code below shows how our Game class is initialized. The instances of board and game class are created and then passed into the Game class's #new method. This is preferred to creating Board and Graphic inside the Game class #initialize. This is an example of Depenency Injection. The idea is to create your dependencies outside of the class that is dependent on them. Dependency Injection is an important part of good object oriented design.</p>
+
+<div class="highlight highlight-source-ruby"><pre>
+board <span class="pl-k">=</span> <span class="pl-c1">Board</span>.<span class="pl-k">new</span>(<span class="pl-c1">8</span>)
+graphic <span class="pl-k">=</span> <span class="pl-c1">Graphic</span>.<span class="pl-k">new</span>(board)
+
+game <span class="pl-k">=</span> <span class="pl-c1">Game</span>.<span class="pl-k">new</span>(board, graphic)
+game.run</pre></div>
+
+<ul>
+<li>Piece - Holds logic all pieces share. Every piece can move on the board and we use the instance method #moves to find all of the moves for a particular piece. The #move_directions method is polymorphic. Each piece can move in slightly different directions I stored those directions in a hash, see below.</li>
+</ul>
+
+<div class="highlight highlight-source-ruby"><pre>  <span class="pl-k">def</span> <span class="pl-en">moves</span>
+    possible_moves <span class="pl-k">=</span> []
+    <span class="pl-v">self</span>.move_directions.each <span class="pl-k">do </span>|<span class="pl-smi">key</span>, <span class="pl-smi">value</span>|
+      possible_moves <span class="pl-k">&lt;&lt;</span> valid_options(value)
+    <span class="pl-k">end</span>
+
+    possible_moves.flatten(<span class="pl-c1">1</span>)
+  <span class="pl-k">end</span></pre></div>
+
+<p>Each piece will have its own move_directions method.</p>
+
+<div class="highlight highlight-source-ruby"><pre><span class="pl-c"># Rook &lt; SlidingPieces</span>
+  <span class="pl-k">def</span> <span class="pl-en">move_directions</span>
+    { <span class="pl-c1">:up</span>    =&gt; [<span class="pl-k">-</span><span class="pl-c1">1</span>,<span class="pl-c1">0</span>], 
+      <span class="pl-c1">:down</span>  =&gt; [<span class="pl-c1">1</span>,<span class="pl-c1">0</span>],
+      <span class="pl-c1">:left</span>  =&gt; [<span class="pl-c1">0</span>,<span class="pl-k">-</span><span class="pl-c1">1</span>],
+      <span class="pl-c1">:right</span> =&gt; [<span class="pl-c1">0</span>,<span class="pl-c1">1</span>],
+    }
+  <span class="pl-k">end</span></pre></div>
+
+<ul>
+<li>Board - The board class is responsible for building the board upon game initialization and moving the pieces. The #move method is the most important method of the class. To move a piece you must first locate the piece on the board and store it in the variable piece. Then we make sure the its a valid move, if the move is valid we mark the piece as moved and change the state of the board. Lastly we check to see if the piece can be promoted.</li>
+</ul>
+
+<div class="highlight highlight-source-ruby"><pre>  <span class="pl-k">def</span> <span class="pl-en">move</span>(<span class="pl-smi">from</span>, <span class="pl-smi">to</span>, <span class="pl-smi">colors_turn</span>)
+    piece <span class="pl-k">=</span> <span class="pl-smi">@cell</span>[from[<span class="pl-c1">0</span>]][from[<span class="pl-c1">1</span>]]
+    check_conditions(from, to, colors_turn, piece)
+    piece.mark
+    execute_move(from, to)
+    promote(piece) <span class="pl-k">if</span> piece.kinged_status <span class="pl-k">==</span> <span class="pl-c1">true</span>
+  <span class="pl-k">end</span></pre></div>
+
+<ul>
+<li><p>Graphic - The graphic class is not very interesting. Its responsible for creating the graphics in the terminal. Since we use a the arrow keys to capture a users move selection, we must re-render the entire board each time the user pushes an arrow key. This needs the most amount of refactoring because the rendering can be slow if the user pushes the keys too fast. However, I think the much simpler UI is worth the slower rendering. In chess people spend most of their time thinking and very little time actually moving pieces around. For this reason I think the slower rendering is worth it for a better UI.</p></li>
+<li><p>SlidingPieces &amp; JumpingPieces - These classes are similar in a lot of ways. The only difference is that a sliding pieces travel distance can change depending on the state of the board. What I mean by that is a Queen (SlidingPiece) can travel the entire length of the board if her path is unobstructed. However, a King (JumpingPiece), is limited in the number of squares he can travel in the x and y directions. Kings can only move 1 space in all directions if unobstructed. So the SlidingPieces utilizes a while loop to continue accumulating possible moves, while the JumpingPieces class uses the predetermined moves that are held by each piece, like the Rook example above.</p></li>
+<li><p>Pawns - Pawns are a bit different of a piece, so they do not inherit from SlidingPiece or JumpingPiece. This is because a pawn has a few special rules. They can only attack if the enemy is in a diagonal in-front of them. They can be "promoted" if they reach they other side of the board. Lastly pawns can move two spaces forward for the intial move but once they are moved they can only move 1 space forward. </p></li>
+</ul>
+
+<h3>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Features</h3>
 
 <ul>
 <li>Arrow Keys for Move input</li>
@@ -36,10 +129,8 @@
 <li>Object Oriented Design Features: Inheritance and Polymorphism</li>
 </ul>
 
-<p><img src="https://cloud.githubusercontent.com/assets/1512282/12130970/a526968a-b3c3-11e5-9a3e-a84940f636fb.png" alt="Chess Screenshot"></p>
-
 <h3>
-<a id="up-and-running" class="anchor" href="#up-and-running" aria-hidden="true"><span class="octicon octicon-link"></span></a>Up and running</h3>
+<a id="up-and-running" class="anchor" href="#up-and-running" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Up and running</h3>
 
 <ul>
 <li>gem install 'colorize'</li>
